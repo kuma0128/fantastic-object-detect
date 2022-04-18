@@ -1,0 +1,9 @@
+flask
+flake8
+black
+isort
+mypy
+python-dotenv
+email-validator
+flask-debugtoolbar
+flask-mail
