@@ -25,7 +25,7 @@ app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 toolbar = DebugToolbarExtension(app)
 
 # Mail config
-app.config["MAIL_SEVER"] = os.environ.get("MAIL_SERVER")
+app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER")
 app.config["MAIL_PORT"] = os.environ.get("MAIL_PORT")
 app.config["MAIL_USE_TLS"] = os.environ.get("MAIL_USE_TLS")
 app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
