@@ -13,7 +13,7 @@ from flask import (
     url_for,
 )
 from flask_debugtoolbar import DebugToolbarExtension
-from flask_mail import Mail
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 
@@ -23,6 +23,16 @@ app.logger.setLevel(logging.DEBUG)
 # リダイレクトを中断しない
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 toolbar = DebugToolbarExtension(app)
+
+# Mail config
+app.config["MAIL_SEVER"] = os.environ.get("MAIL_SERVER")
+app.config["MAIL_PORT"] = os.environ.get("MAIL_PORT")
+app.config["MAIL_USE_TLS"] = os.environ.get("MAIL_USE_TLS")
+app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
+app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("MAIL_DEFAULT_SENDER")
+# flask-mailを登録
+mail = Mail(app)
 
 
 @app.route("/")
@@ -43,9 +53,7 @@ def show_name(name):
 with app.test_request_context():
 
     print(url_for("index"))
-
     print(url_for("hello-endpoint", name="world"))
-
     print(url_for("show_name", name="taisei", page="1"))
 
 # ここで呼ぶとエラー
@@ -102,7 +110,22 @@ def contact_complete():
         if not is_valid:
             return redirect(url_for("contact"))
 
+        send_email(
+            email,
+            "問い合わせありがとうございました。",
+            "contact_mail",
+            username=username,
+            description=description,
+        )
+
         flash("問い合わせありがとうございました。")
         return redirect(url_for("contact_complete"))
 
     return render_template("contact_complete.html")
+
+
+def send_email(to, subject, template, **kwargs):
+    msg = Message(subject, recipients=[to])
+    msg.body = render_template(template + ".txt", **kwargs)
+    msg.html = render_template(template + ".html", **kwargs)
+    mail.send(msg)
