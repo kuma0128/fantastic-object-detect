@@ -16,6 +16,7 @@ def create_app():
         SECRET_KEY="dagfiul3d8dSKdfpGN120fi",
         SQLALCHEMY_DATABASE_URI=f"sqlite:///{Path(__file__).parent.parent / 'local.sqlite'}",
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        SQLALCHEMY_ECHO=True,
     )
     # SQLalchemy と appの連携
     db.init_app(app)
