@@ -9,4 +9,6 @@ flask-debugtoolbar
 flask-mail
 flask-sqlalchemy
 flask-migrate
+flask-wtf
+
 
