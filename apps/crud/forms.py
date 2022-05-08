@@ -1,7 +1,7 @@
 from ast import Pass
 
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, SubmitField
+from wtforms import PasswordField, StringField, SubmitField, ValidationError
 from wtforms.validators import DataRequired, Email, length
 
 
@@ -27,5 +27,10 @@ class UserForm(FlaskForm):
     password = PasswordField(
         "password", validators=[DataRequired(message="need password")]
     )
+
+    # my validator
+    def validate_username(self, username):
+        if not username.data:
+            raise ValidationError("need username")
 
     submit = SubmitField("register")
