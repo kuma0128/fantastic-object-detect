@@ -38,3 +38,6 @@ def create_user():
 
         db.session.add(user)
         db.session.commit()
+
+        return redirect(url_for("crud.users"))
+    return render_template("crud/create.html", form=form)
