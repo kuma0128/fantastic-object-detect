@@ -1,9 +1,9 @@
-from pathlib import Path
-
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
+
+from apps.config import config
 
 # sqlalchemy instance
 db = SQLAlchemy()
@@ -11,17 +11,11 @@ db = SQLAlchemy()
 csrf = CSRFProtect()
 
 
-def create_app():
+def create_app(config_key):
     # Flask インスタンス
     app = Flask(__name__)
     # set app's config
-    app.config.from_mapping(
-        SECRET_KEY="dagfiul3d8dSKdfpGN120fi",
-        SQLALCHEMY_DATABASE_URI=f"sqlite:///{Path(__file__).parent.parent / 'local.sqlite'}",
-        SQLALCHEMY_TRACK_MODIFICATIONS=False,
-        SQLALCHEMY_ECHO=True,
-        WTF_CSRF_SECRET_KEY="Alcieml93pvU2cW29ap1COI",
-    )
+    app.config.from_object(config[config_key])
     # CSFR　と　appの連携
     csrf.init_app(app)
     # SQLalchemy と appの連携
