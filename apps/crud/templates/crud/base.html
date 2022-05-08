@@ -5,8 +5,8 @@
     <meta charset="UTF-8" />
     <!-- titleを継承先で実装 -->
     <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('crud.static', filename='style.css') }}" />
 </head>
-<link rel="stylesheet" href="{{ url_for('crud.static', filename='style.css') }}" />
 
 <body>
     <!-- contentを継承先で実装 -->
