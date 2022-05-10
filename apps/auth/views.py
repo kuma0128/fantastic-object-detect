@@ -38,3 +38,11 @@ def signup():
 
         # save session
         login_user(user)
+
+        next_ = request.args.get("next")
+
+        if next_ is None or not next_.startswith("/"):
+            next_ = url_for("crud.users")
+        return redirect(next_)
+
+    return render_template("auth/signup.html", form=form)
