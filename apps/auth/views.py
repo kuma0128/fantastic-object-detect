@@ -1,4 +1,10 @@
-from flask import Blueprint, render_template
+from crypt import methods
+
+from apps.app import db
+from apps.auth.forms import SignUpForm
+from apps.crud.models import User
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import login_user
 
 auth = Blueprint(
     "auth",
@@ -11,3 +17,24 @@ auth = Blueprint(
 @auth.route("/")
 def index():
     return render_template("auth/index.html")
+
+
+@auth.route("/signup", methods=["GET", "POST"])
+def signup():
+    form = SignUpForm()
+    if form.validate_on_submit():
+        user = User(
+            username=form.username.data,
+            email=form.email.data,
+            password=form.password.data,
+        )
+
+        if user.is_duplicate_email():
+            flash("This email-address is registed")
+            return redirect(url_for("auth.signup"))
+
+        db.session.add(user)
+        db.session.commit()
+
+        # save session
+        login_user(user)
